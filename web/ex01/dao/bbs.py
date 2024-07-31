@@ -3,11 +3,49 @@ from dao import db
 def list():
   try:
     with db.connection.cursor() as cursor:
-      sql = "select * from bbs order by bid desc"
+      sql = "select *, date_format(regDate,'%Y-%m-%d') fmtDate from bbs order by bid desc"
       cursor.execute(sql)
       rows = cursor.fetchall()
       return rows
   except Exception as err:
     print('목록오류:', err)
+  finally:
+    cursor.close()
+
+def insert(bbs):
+  try:
+    with db.connection.cursor() as cursor:
+      sql = "insert into bbs(title,contents,writer) \
+        values(%s,%s,%s)"
+      cursor.execute(sql,(bbs.get('title'),bbs.get('contents'),bbs.get('uid')))
+      return 'success'
+  except Exception as err:
+    print('등록오류:',err)
+    return 'fail'
+  finally:
+    cursor.close()
+    
+def read(bid):
+  try:
+    with db.connection.cursor() as cursor:
+      sql="select *, date_format(regDate,'%%Y-%%m-%%d') fmtDate \
+          from bbs where bid=%s"
+      cursor.execute(sql, bid)
+      row = cursor.fetchone()
+      return row
+  except Exception as err:
+    print('읽기오류:', err)
+  finally:
+    cursor.close()
+
+def delete(bid):
+  try:
+    with db.connection.cursor() as cursor:
+      sql = "delete from bbs where bid=%s"
+      cursor.execute(sql,bid)
+      return 'success'
+  except Exception as err:
+    print('삭제오류:',err)
+    return 'fail'
   finally:
     cursor.close()
