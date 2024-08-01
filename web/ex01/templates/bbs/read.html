@@ -1,8 +1,12 @@
+<script>
+   const writer="{{bbs.writer}}";
+   const bid="{{bbs.bid}}";
+</script>
 <div class="my-5 px-5">
   <h1 class="text-center mb-5">{{title}}</h1>
   <div class="text-end mb-2" id="update">
-    <button class="btn btn-outline-success btn-sm update">수정</button>
-    <button class="btn btn-outline-danger btn-sm delete">삭제</button>
+    <button class="btn btn-outline-dark btn-sm update">수정</button>
+    <button class="btn btn-outline-dark btn-sm delete">삭제</button>
   </div>
   <div class="card">
     <div class="card-body">
@@ -12,13 +16,14 @@
     </div>
     <div class="card-footer text-muted py-3">
       Posted by 
-      <span style="color:blue;font-size:18px;">{{bbs.writer}}</span> 
+      <span>{{bbs.writer}}</span> 
       on {{bbs.fmtDate}}
     </div>
   </div>
+  {%include 'bbs/reply.html'%}
 </div>
 <script>
-  const writer="{{bbs.writer}}";
+
   if(writer == uid){
     $("#update").show();
   }else{
@@ -38,5 +43,9 @@
         }
       }
     });
+  });
+
+  $(".update").on("click",()=>{
+    location.href=`/bbs/update/${bid}`;
   });
 </script>

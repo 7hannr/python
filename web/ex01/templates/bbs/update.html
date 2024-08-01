@@ -2,10 +2,10 @@
   <h1>{{title}}</h1>
   <div class="row justify-content-center">
     <form name="frm" method="post" class="col-xs-12 col-md-10 col-lg-8">
-      <input name="title" placeholder="제목을 입력하세요." class="form-control mb-2" />
-      <textarea name="contents" placeholder="내용을 입력하세요." rows="10" class="form-control"></textarea>
+      <input name="title" value="{{bbs.title}}" class="form-control mb-2" />
+      <textarea name="contents" rows="10" class="form-control">{{bbs.contents}}</textarea>
       <div class="text-center my-3">
-        <button class="btn btn-outline-primary">게시글등록</button>
+        <button class="btn btn-outline-primary">게시글수정</button>
         <button class="btn btn-outline-secondary" type="reset">등록취소</button>
       </div>
     </form>
@@ -16,22 +16,23 @@
     e.preventDefault();
     const title = $(frm.title).val();
     const contents = $(frm.contents).val();
-
+    const bid = "{{bbs.bid}}";
     if (title == "") {
       alert("제목을 입력하세요.");
       $(frm.title).focus();
       return;
     }
-    //console.log(uid,title,contents);
+    if (!confirm(`${bid}번 변경된 정보를 수정하실래요?`)) return;
     $.ajax({
       type: "post",
-      url: "/bbs/insert",
-      data: JSON.stringify({ title, contents, uid }),
+      url: "/bbs/update",
+      data: JSON.stringify({ title, contents, bid }),
       success: function (data) {
         if (data == 'success') {
-          location.href = '/bbs/'
+          location.href = `/bbs/${bid}`
         }
       }
     });
   });
+
 </script>

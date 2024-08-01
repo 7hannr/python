@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,request
-from dao import bbs
+from dao import bbs #as bbsDAO
 import json
 
 bp = Blueprint('bbs', __name__, url_prefix='/bbs')
@@ -11,7 +11,14 @@ def list():
 
 @bp.route('/list.json')
 def listJSON():
-  return bbs.list()
+  args =request.args
+  page =args['page']
+  size =args['size']
+  print(args)
+  list =bbs.list(page,size)
+  total=bbs.total()
+  data={'total':total.get('cnt'),'list':list}
+  return data
 
 @bp.route('/insert')
 def insert():
@@ -22,7 +29,7 @@ def insert():
 @bp.route('/insert',methods=['POST'])
 def insertPost():
   req=json.loads(request.get_data())
-  #print(req)
+  print(req)
   result = bbs.insert(req)
   return result
 
@@ -36,3 +43,17 @@ def read(bid):
 def delete(bid):
   result = bbs.delete(bid)
   return result
+
+@bp.route('/update/<int:bid>')
+def update(bid):
+  vo=bbs.read(bid)
+  return render_template(
+    'index.html', title='정보수정', pageName='bbs/update.html',bbs=vo)
+  
+@bp.route('/update',methods=['POST'])
+def updatePOST():
+  req=json.loads(request.get_data())
+  result = bbs.update(req)
+  return result
+  
+  
