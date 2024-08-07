@@ -1,0 +1,54 @@
+<div class="my-5">
+  <h1 class="text-center mb-5">Finance Chart</h1>
+  <div id="div_list" class="row"></div>
+  {%raw%}
+  <script id="temp_list" type="x-handlebars-template">
+    <table class="table">
+      <tr>
+        <th>No.</th>
+        <th>종목명</th>
+        <th>현재가</th>
+        <th>전일비</th>
+        <th>등락률</th>
+        <th>액면가</th>
+        <th>시가총액</th>
+        <th>상장주식수</th>
+        <th>외국인비율</th>
+        <th>거래량</th>
+        <th>PER</th>
+        <th>ROE</th>
+      </tr>
+      {{#each .}}
+      <tr>
+        <th>{{N}}</th>
+        <th>{{종목명}}</th>
+        <th>{{현재가}}</th>
+        <th>{{전일비}}</th>
+        <th>{{등락률}}</th>
+        <th>{{액면가}}</th>
+        <th>{{시가총액}}</th>
+        <th>{{상장주식수}}</th>
+        <th>{{외국인비율}}</th>
+        <th>{{거래량}}</th>
+        <th>{{PER}}</th>
+        <th>{{ROE}}</th>
+      </tr>
+      {{/each}}
+    </table>
+  </script>
+  {%endraw%}
+</div>
+
+<script>
+  $("#loading").show();
+  $.ajax({
+    type:"get",
+    url:"/scrap/finance.json",
+    success:function(data){
+      console.log(data);
+      const temp = Handlebars.compile($("#temp_list").html());
+      $("#div_list").html(temp(JSON.parse(data)));
+      $("#loading").hide();
+    }
+  });
+</script>
