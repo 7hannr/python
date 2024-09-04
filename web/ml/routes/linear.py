@@ -17,7 +17,7 @@ def page3():
 @bp.route('/result1')
 def result1():
   hours = float(request.args['hours'])
-  dataset = pd.read_csv('data/LinearRegressionData.csv')
+  dataset = pd.read_csv('static/data/LinearRegressionData.csv')
   X = dataset.iloc[:, :-1].values
   y = dataset.iloc[:, -1].values
   reg = LinearRegression()
